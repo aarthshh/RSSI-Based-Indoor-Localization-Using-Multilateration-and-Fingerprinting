@@ -1,15 +1,19 @@
-
+import numpy as np
 from geometry import distance
 from scipy.optimize import least_squares
 
 # Calculates distance errors between a position and anchors.
-def calc_errors(position, anchors, distances):
+def calc_errors(position, anchors, distances, weights=None):
     errors = []
     for name, anchor in anchors.items():
         candidate_distance = distance(position, anchor)
         error = candidate_distance - distances[name]
-        errors.append(error)
 
+        if weights is not None: 
+            error = np.sqrt(weights[name]) * error
+
+        errors.append(error)
+    
     return errors
 
 # Estimates position using least squares method.
@@ -23,3 +27,10 @@ def position_error(actual, estimated):
     error_distance = distance(actual, estimated)
 
     return error_distance
+
+# Weightted estimator
+
+def estimate_position_weighted(anchors, distances, weights):
+    initial_guess=(3,3)
+    result=least_squares(calc_errors, initial_guess, args=(anchors, distances, weights))
+    return result.x
