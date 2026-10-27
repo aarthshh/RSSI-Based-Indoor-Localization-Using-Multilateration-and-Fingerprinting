@@ -2,16 +2,6 @@
 from geometry import distance
 from scipy.optimize import least_squares
 
-distances = {
-    "A1": 3.6055,
-    "A2": 3.6055,
-    "A3": 5.0,
-    "A4": 5.0
-}
-
-candidate = (2,2)
-
-
 # Calculates distance errors between a position and anchors.
 def calc_errors(position, anchors, distances):
     errors = []
@@ -33,6 +23,3 @@ def position_error(actual, estimated):
     error_distance = distance(actual, estimated)
 
     return error_distance
-
-print(calc_errors((2,2), ANCHORS, distances))
-print(estimate_position(ANCHORS,distances))
